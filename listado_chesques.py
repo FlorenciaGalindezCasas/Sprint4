@@ -1,39 +1,49 @@
 import csv
-import argparse
+import sys
+from sys import argv
 from datetime import datetime
 
 dt = datetime.now()
 dtn = dt.strftime("%d-%m-%Y")
 
-with open ("movimiento_cheques.csv", "r") as archivo:
+n = len(sys.argv)
+
+nombre_csv = sys.argv[1]      
+dni = sys.argv[2]
+salida = sys.argv[3]
+tipo = sys.argv[4]
+estado = None
+fecha = None
+
+if n == 6:
+  estado = sys.argv[5]
+  fecha = sys.argv[5]
+elif n == 7:
+  estado = sys.argv[5]
+  fecha = sys.argv[6]
+
+with open (f"{nombre_csv}", "r") as archivo:
     csv_reader = csv.reader(archivo)
-    for line in csv_reader:
+    
+    for line in csv_reader:   
+      if dni in line[8]:      
+        if salida == "PANTALLA":
+          if tipo in line:
+            if estado in line and tipo in line:
+              print(line)
+            elif estado == None:
+              print(line)
 
-      parser = argparse.ArgumentParser()
-      parser.add_argument("DNI", type = str,)
-      parser.add_argument("salida", type = str)
-      parser.add_argument("tipo", type = str)
-      parser.add_argument("estado", type = str, nargs = "?")
-      parser.add_argument("rangoFecha", type = str, nargs = "?")
-      args = parser.parse_args()
-
-      if args.DNI in line[8]:      
-        if args.salida == "PANTALLA":
-          if args.tipo in line[9]:
-            if args.estado in line and args.tipo in line[9]:
-                print(line)
-            elif args.estado == None: 
-                print(line)
-                
-      elif args.salida == "CSV":
-          if args.tipo in line[9]:
-            if args.estado in line and args.tipo in line[9]:
-              with open(f"{args.DNI}-{dtn}.csv", "w") as archivo:
-               csv_writer = csv.writer(archivo)
-               csv_writer.writerow(line) 
-            elif args.estado == None and args.tipo in line[9]: 
-              with open(f"{args.DNI}-{dtn}.csv", "w") as archivo:
-               csv_writer = csv.writer(archivo)
-               csv_writer.writerow(line)
+                  
+        elif salida == "CSV":
+          if tipo in line[9]:
+            if estado in line and tipo in line[9]:
+              with open(f"{dni}-{dtn}.csv", "a") as archivo:
+                csv_writer = csv.writer(archivo)
+                csv_writer.writerow(line) 
+            elif estado == None and tipo in line[9]: 
+              with open(f"{dni}-{dtn}.csv", "a") as archivo:
+                csv_writer = csv.writer(archivo)
+                csv_writer.writerow(line)
 
         
