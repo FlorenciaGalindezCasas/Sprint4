@@ -4,6 +4,19 @@ from sys import argv
 from datetime import date, datetime
 
 n = len(sys.argv)
+if (n < 5):
+  print("¡Ingresar al menos 4 argumenos!")
+  print("El orden de los argumentos son los siguientes:\
+    \n  a. Nombre del archivo csv\
+    \n  b. DNI del cliente\
+    \n  c. Salida: PANTALLA o CSV\
+    \n  d. Tipo de cheque: EMITIDO o DEPOSITADO\
+    \n  e. Estado del cheque: PENDIENTE, APROBADO, RECHAZADO (Opcional)\
+    \n  f. Rango de fecha: xx-xx-xxxx:yy-yy-yyyy (Opcional)")
+  sys.exit()   
+if (n>7):
+  print('¡Cantidad de parametros incorrecta! Se pueden ingresar hasta 6 parametros (4 obligatorios y 2 opcionales)')
+  sys.exit()
 
 nombre_csv = sys.argv[1]      
 dni = sys.argv[2]
