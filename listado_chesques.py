@@ -5,7 +5,7 @@ from datetime import date, datetime
 
 n = len(sys.argv)
 if (n < 5):
-  print("¡Ingresar al menos 4 argumenos!")
+  print("¡Ingresar 4 argumentos como mínimo!")
   print("El orden de los argumentos son los siguientes:\
     \n  a. Nombre del archivo csv\
     \n  b. DNI del cliente\
@@ -15,7 +15,7 @@ if (n < 5):
     \n  f. Rango de fecha: xx-xx-xxxx:yy-yy-yyyy (Opcional)")
   sys.exit()   
 if (n>7):
-  print('¡Cantidad de parametros incorrecta! Se pueden ingresar hasta 6 parametros (4 obligatorios y 2 opcionales)')
+  print("¡Error! Se pueden ingresar hasta 6 parametros (4 obligatorios y 2 opcionales)")
   sys.exit()
 
 nombre_csv = sys.argv[1]      
@@ -59,29 +59,37 @@ with open (f"{nombre_csv}", "r") as archivo:
       if fecha and (fecha_cheque < fecha_inicial or fecha_cheque > fecha_final):
         continue
       res.append(line)
- 
-filtrados = set()     
-for nro_line, line in enumerate(res):
-   nro_cheque = line[0]
-   nro_cuenta = line[3]
-   nro_dni = line[8]
 
-if(nro_cheque, nro_cuenta, nro_dni) in filtrados:
-  res.append(f"Hay datos repetidos en fila {nro_line}")
-else:
-  filtrados.add((line[0], line[3], line[8]))
+#Filtrado nuevo             
+def Repetidos():
+  repetidos = []
+  no_repetidos = []
+  for line in res:
+    numero_cheque = line[0]
+    if numero_cheque not in no_repetidos:
+      no_repetidos.append(numero_cheque)
+    elif numero_cheque not in repetidos:
+      repetidos.append(numero_cheque)
+  if len(repetidos) == 0:
+    return False
+  else:
+    for error in repetidos:
+      print(f'¡Error! El cheque N° {error} con DNI: {dni}, está repetido')
+
                        
 if salida == "PANTALLA":
+  Repetidos()
   for fila in res:
     print(",".join(fila))
-    
 elif salida == "CSV":
-    datos = [[line[3], line[5], line[6], line[7]]for line in res]
-    dt = datetime.now()
-    dt = dt.strftime("%d,%m,%Y")
-    with open(f"{dni}-{dt}.csv", "w", newline="") as archivo:
-        writer = csv.writer(archivo)
-        writer.writerows(datos)
+  Repetidos()
+  datos = [[line[3], line[5], line[6], line[7]]for line in res]
+  dt = datetime.now()
+  dt = dt.strftime("%d,%m,%Y")
+  with open(f"{dni}-{dt}.csv", "w", newline="") as archivo:
+    writer = csv.writer(archivo)
+    writer.writerows(datos)
+
   
 
         
