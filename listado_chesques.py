@@ -1,6 +1,5 @@
 import csv
 import sys
-from sys import argv
 from datetime import date, datetime
 
 n = len(sys.argv)
@@ -38,8 +37,9 @@ elif n == 7:
   fecha = sys.argv[6].split(":")
 
 if fecha:
-  fecha_inicial = datetime.timestamp(datetime.strptime(fecha[0], "%d-%m-%y"))
-  fecha_final = datetime.timestamp(datetime.strptime(fecha[1], "%d-%m-%y"))
+  fecha_inicial = datetime.timestamp(datetime.strptime(fecha[0], "%d-%m-%Y"))
+  fecha_final = datetime.timestamp(datetime.strptime(fecha[1], "%d-%m-%Y"))
+  
   
 res = []
 
@@ -56,11 +56,10 @@ with open (f"{nombre_csv}", "r") as archivo:
         continue
       if estado and estado_cheque != estado:
         continue      
-      if fecha and (fecha_cheque < fecha_inicial or fecha_cheque > fecha_final):
+      if fecha and (float(fecha_cheque) < fecha_inicial or float(fecha_cheque) > fecha_final):
         continue
       res.append(line)
-
-#Filtrado nuevo             
+          
 def Repetidos():
   repetidos = []
   no_repetidos = []
@@ -90,6 +89,5 @@ elif salida == "CSV":
     writer = csv.writer(archivo)
     writer.writerows(datos)
 
-  
 
         
